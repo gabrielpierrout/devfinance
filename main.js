@@ -12,15 +12,12 @@ const Modal = {
 }
 
 const Storage = {
-  // Armazenar transações no localstorage
   get() {
-    return JSON.parse(localStorage.getItem('dev.finances:transaction')) || []
+    return JSON.parse(localStorage.getItem('dev.finances:transactions')) || []
   },
-
   set(transactions) {
     localStorage.setItem(
-      'dev.finances:transaction',
-      transactions,
+      'dev.finances:transactions',
       JSON.stringify(transactions)
     )
   }
@@ -28,7 +25,6 @@ const Storage = {
 
 const Transaction = {
   all: Storage.get(),
-
   add(transaction) {
     Transaction.all.push(transaction)
 
@@ -37,7 +33,6 @@ const Transaction = {
 
   remove(index) {
     Transaction.all.splice(index, 1)
-
     App.reload()
   },
 
@@ -122,6 +117,7 @@ const DOM = {
 const Utils = {
   formatAmount(value) {
     value = Number(value) * 100
+    return Math.round(value)
 
     return value
   },
@@ -215,9 +211,7 @@ const Form = {
 
 const App = {
   init() {
-    Transaction.all.forEach((transaction, index) => {
-      DOM.addTransaction(transaction, index)
-    })
+    Transaction.all.forEach(DOM.addTransaction)
 
     DOM.updateBalance()
 
